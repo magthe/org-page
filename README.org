@@ -47,6 +47,23 @@
   introduction and configuration, please see "quick-guide.org" in the "doc"
   folder.
 
+** Installation in Spacemacs
+
+   Currently I'm installing it using
+
+
+   #+begin_src elisp
+     dotspacemacs-additional-packages
+     '(
+       ...
+       (org-page :location (recipe
+                            :fetcher github
+                            :repo "magthe/org-page"
+                            :files ("*.el" "themes")))
+       ...
+       )
+   #+end_src
+
 ** Installation
 
    Org-page is now available from the famous emacs package repo [[http://melpa.milkbox.net/][melpa]] so the
