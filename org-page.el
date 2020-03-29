@@ -230,7 +230,7 @@ responsibility to guarantee these parameters are valid."
    (let* ((i (read-string "Title: "))
           (u (read-string "URI(%y, %m and %d can be used to represent year, \
 month and day): " (unless (string= i "")
-                    (format-spec "/blog/%y/%m/%d/%t"
+                    (format-spec "/blog/%y-%m-%d/%t"
                                  `((?y . "%y")
                                    (?m . "%m")
                                    (?d . "%d")
@@ -287,11 +287,11 @@ FILENAME: the file name of this post
 Note that this function does not verify the category and filename, it is users'
 responsibility to guarantee the two parameters are valid."
   (interactive
-   (let* ((c (read-string "Category: " "blog"))
-          (f (read-string "filename: " "new-post.org")))
+   (let* ((c (read-string "Category: " (caar op/category-config-alist)))
+          (f (read-string "Filename: " "new-post.org")))
      (list c f)))
   (if (string= category "")
-      (setq category "blog"))
+      (setq category (caar op/category-config-alist)))
   (if (string= filename "")
       (setq filename "new-post.org"))
   (unless (string-suffix-p ".org" filename)
@@ -308,7 +308,7 @@ responsibility to guarantee the two parameters are valid."
     (if (called-interactively-p 'any)
         (call-interactively 'op/insert-options-template)
       (op/insert-options-template "<Insert Your Title Here>"
-                                  "/%y/%m/%d/%t/"
+                                  "/%y-%m-%d/%t"
                                   "add, keywords, here"
                                   "add, tags, here"
                                   "add description here"))
