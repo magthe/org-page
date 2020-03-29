@@ -32,6 +32,7 @@
 (require 'git)
 (require 'dash)
 
+
 (defun op/git-all-files (repo-dir &optional branch)
   "This function will return a list contains all org files in git repository
 presented by REPO-DIR, if optional BRANCH is offered, will check that branch

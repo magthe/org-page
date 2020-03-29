@@ -93,7 +93,6 @@ points to the directory `themes' in org-page installation directory."
   "Code highlight render."
   :group 'org-page :type 'symbol)
 
-
 (defcustom op/personal-github-link "https://github.com/kelvinh/org-page"
   "The personal github link."
   :group 'org-page :type 'string)
@@ -164,28 +163,6 @@ default value is `op/get-file-category'."
 (defvar op/category-ignore-list
   '("themes" "assets")
   "Ignore these subdirs/categories for navigation")
-
-;;; this variable is deprecated
-(defvar op/default-template-parameters
-  (ht ("blog-uri" "/blog/")
-      ("tags-uri" "/tags/")
-      ("site-main-title" op/site-main-title)
-      ("site-sub-title" op/site-sub-title)
-      ("avatar" op/personal-avatar)
-      ("github" op/personal-github-link)
-      ("site-domain" (if (and op/site-domain
-                              (string-match "\\`https?://\\(.*[a-zA-Z]\\)/?\\'"
-                                            op/site-domain))
-                         (match-string 1 op/site-domain)
-                       op/site-domain))
-      ("disqus-shortname" op/personal-disqus-shortname)
-      ("disqus-comment" (if op/personal-disqus-shortname t nil))
-      ("duoshuo-shortname" op/personal-duoshuo-shortname)
-      ("duoshuo-comment" (if op/personal-duoshuo-shortname t nil))
-      ("google-analytics-id" op/personal-google-analytics-id)
-      ("google-analytics" (if op/personal-google-analytics-id t nil))
-      ("creator-info" org-html-creator-string))
-  "Default template rendering parameters.")
 
 (defvar op/item-cache nil
   "The cache for general purpose.")

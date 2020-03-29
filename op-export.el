@@ -212,7 +212,6 @@ can contain following parameters:
                                 (?f . ,html-file-name)
                                 (?t . ,encoded-title)))))
 
-
 (defun op/get-file-category (org-file)
   "Get org file category presented by ORG-FILE, return all categories if
 ORG-FILE is nil. This is the default function used to get a file's category,
