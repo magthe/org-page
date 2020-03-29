@@ -68,10 +68,6 @@ deleted. PUB-ROOT-DIR is the root publication directory."
              (setq buffer-file-name nil) ;; dismiss `kill-anyway?'
              ))
        all-list)
-      (unless (member
-               (expand-file-name "index.org" op/repository-directory)
-               all-list)
-        (op/generate-default-index file-attr-list pub-root-dir))
       (op/update-category-index file-attr-list pub-root-dir)
       (op/update-rss file-attr-list pub-root-dir)
       (op/update-tags file-attr-list pub-root-dir)
@@ -372,59 +368,6 @@ file attribute property lists. PUB-BASE-DIR is the root publication directory."
                                                     "Unknown Email"))))))))
             (concat cat-dir "index.html") 'html-mode)))
      sort-alist)))
-
-(defun op/generate-default-index (file-attr-list pub-base-dir)
-  "Generate default index page, only if index.org does not exist. FILE-ATTR-LIST
-is the list of all file attribute property lists. PUB-BASE-DIR is the root
-publication directory."
-  (let ((sort-alist (op/rearrange-category-sorted file-attr-list))
-        (id 0)
-        (recent-posts (seq-take (sort (copy-sequence file-attr-list)
-                                      (lambda (a b)
-                                        (string-lessp (plist-get b :date)
-                                                     (plist-get a :date))))
-                                10)))
-    (string-to-file
-     (mustache-render
-      (op/get-cache-create
-       :container-template
-       (message "Read container.mustache from file")
-       (file-to-string (concat (op/get-template-dir) "container.mustache")))
-      (ht ("header"
-           (op/render-header
-            (ht ("page-title" (concat "Index - " op/site-main-title))
-                ("author" (or user-full-name "Unknown Author")))))
-          ("nav" (op/render-navigation-bar))
-          ("content"
-           (op/render-content
-            "index.mustache"
-            (ht ("recent-posts"
-                 (mapcar 'op--post-hashtable recent-posts))
-                ("categories"
-                 (mapcar
-                  #'(lambda (cell)
-                      (ht ("id" (setq id (+ id 1)))
-                          ("category" (capitalize (car cell)))
-                          ("posts" (mapcar
-                                    'op--post-hashtable
-                                    (cdr cell)))))
-                  (cl-remove-if
-                   #'(lambda (cell)
-                       (string= (car cell) "about"))
-                   sort-alist))))))
-          ("footer"
-           (op/render-footer
-            (ht ("show-meta" nil)
-                ("show-comment" nil)
-                ("author" (or user-full-name "Unknown Author"))
-                ("google-analytics" (and (boundp
-                                          'op/personal-google-analytics-id)
-                                         op/personal-google-analytics-id))
-                ("google-analytics-id" op/personal-google-analytics-id)
-                ("creator-info" op/html-creator-string)
-                ("email" (confound-email (or user-mail-address
-                                             "Unknown Email"))))))))
-     (concat pub-base-dir "index.html") 'html-mode)))
 
 (defun op--post-hashtable (post)
   "Takes a POST and turn it into a hashtable format for a mustache template."
