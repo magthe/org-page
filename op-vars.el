@@ -158,13 +158,6 @@ default value is `op/get-file-category'."
     :uri-generator op/generate-uri
     :uri-template "/"
     :sort-by :date
-    :category-index nil)
-   ("about"
-    :show-meta nil
-    :show-comment nil
-    :uri-generator op/generate-uri
-    :uri-template "/about/"
-    :sort-by :date
     :category-index nil))
   "Configurations for different categories, can and should be customized.")
 
@@ -175,9 +168,7 @@ default value is `op/get-file-category'."
 ;;; this variable is deprecated
 (defvar op/default-template-parameters
   (ht ("blog-uri" "/blog/")
-      ("wiki-uri" "/wiki/")
       ("tags-uri" "/tags/")
-      ("about-uri" "/about/")
       ("site-main-title" op/site-main-title)
       ("site-sub-title" op/site-sub-title)
       ("avatar" op/personal-avatar)

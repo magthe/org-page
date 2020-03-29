@@ -72,10 +72,6 @@ deleted. PUB-ROOT-DIR is the root publication directory."
                (expand-file-name "index.org" op/repository-directory)
                all-list)
         (op/generate-default-index file-attr-list pub-root-dir))
-      (unless (member
-               (expand-file-name "about.org" op/repository-directory)
-               all-list)
-        (op/generate-default-about pub-root-dir))
       (op/update-category-index file-attr-list pub-root-dir)
       (op/update-rss file-attr-list pub-root-dir)
       (op/update-tags file-attr-list pub-root-dir)
@@ -446,41 +442,6 @@ publication directory."
        (plist-get post :category))
       ("post-thumb"
        (or (plist-get post :thumb) ""))))
-
-(defun op/generate-default-about (pub-base-dir)
-  "Generate default about page, only if about.org does not exist. PUB-BASE-DIR
-is the root publication directory."
-  (let ((pub-dir (expand-file-name "about/" pub-base-dir)))
-    (unless (file-directory-p pub-dir)
-      (mkdir pub-dir t))
-    (string-to-file
-     (mustache-render
-      (op/get-cache-create
-       :container-template
-       (message "Read container.mustache from file")
-       (file-to-string (concat (op/get-template-dir) "container.mustache")))
-      (ht ("header"
-           (op/render-header
-            (ht ("page-title" (concat "About - " op/site-main-title))
-                ("author" (or user-full-name "Unknown Author")))))
-          ("nav" (op/render-navigation-bar))
-          ("content"
-           (op/render-content
-            "about.mustache"
-            (ht ("author" (or user-full-name "Unknown Author")))))
-          ("footer"
-           (op/render-footer
-            (ht ("show-meta" nil)
-                ("show-comment" nil)
-                ("author" (or user-full-name "Unknown Author"))
-                ("google-analytics" (and (boundp
-                                          'op/personal-google-analytics-id)
-                                         op/personal-google-analytics-id))
-                ("google-analytics-id" op/personal-google-analytics-id)
-                ("creator-info" op/html-creator-string)
-                ("email" (confound-email (or user-mail-address
-                                             "Unknown Email"))))))))
-     (concat pub-dir "index.html") 'html-mode)))
 
 (defun op/generate-tag-uri (tag-name)
   "Generate tag uri based on TAG-NAME."
