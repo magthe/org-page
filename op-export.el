@@ -339,17 +339,17 @@ file attribute property lists. PUB-BASE-DIR is the root publication directory."
                          #'(lambda (attr-plist)
                              (ht ("date"
                                   (funcall
-				   op/date-final-format
-				   (plist-get
-				    attr-plist
-				    (plist-get
-				     (cdr (or (assoc
-					       (plist-get attr-plist :category)
-					       op/category-config-alist)
-					      (assoc
-					       "blog"
-					       op/category-config-alist)))
-				     :sort-by))))
+                                   op/date-final-format
+                                   (plist-get
+                                    attr-plist
+                                    (plist-get
+                                     (cdr (or (assoc
+                                               (plist-get attr-plist :category)
+                                               op/category-config-alist)
+                                              (assoc
+                                               "blog"
+                                               op/category-config-alist)))
+                                     :sort-by))))
                                  ("post-uri" (plist-get attr-plist :uri))
                                  ("post-title" (plist-get attr-plist :title))))
                          (cdr cat-list))))))
