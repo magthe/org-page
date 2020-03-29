@@ -148,7 +148,7 @@ default value is `op/get-file-category'."
     :show-meta t
     :show-comment t
     :uri-generator op/generate-uri
-    :uri-template "/blog/%y/%m/%d/%t/"
+    :uri-template "/blog/%y-%m-%d/%t/"
     :sort-by :date     ;; how to sort the posts
     :category-index t) ;; generate category index or not
    ("index"
