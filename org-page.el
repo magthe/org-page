@@ -228,20 +228,22 @@ Note that this function does not verify the input parameters, it is users'
 responsibility to guarantee these parameters are valid."
   (interactive
    (let* ((i (read-string "Title: "))
-          (u (read-string "URI(%y, %m and %d can be used to represent year, \
-month and day): " (unless (string= i "")
-                    (format-spec "/blog/%y-%m-%d/%t"
-                                 `((?y . "%y")
-                                   (?m . "%m")
-                                   (?d . "%d")
-                                   (?t . ,(encode-string-to-url i)))))))
-          (k (read-string "Keywords(separated by comma and space [, ]): "))
-          (a (read-string "Tags(separated by comma and space [, ]): "))
-          (d (read-string "Description: ")))
+          (u (read-string "URI (%y(ear), %m(onth), %d(ay), %t(itle)): "
+                          (unless (string= i "")
+                            (format-spec "/blog/%y-%m-%d/%t"
+                                         `((?y . "%y")
+                                           (?m . "%m")
+                                           (?d . "%d")
+                                           (?t . ,(encode-string-to-url i)))))))
+          (a (read-string "Tags (separated by comma and space [, ]): "))
+          (k (read-string "Keywords (separated by comma and space [, ], defaults to tags): "))
+          (d (read-string "Description (RSS): ")))
      (list i u k a d)))
   (if (not (bolp)) (newline))
-  (insert (format
-           "#+TITLE:       %s
+  (let* ((the-tags (if (string= tags "") "<TODO: insert your tags here>" tags))
+         (the-keywords (if (string= keywords "") the-tags keywords)))
+    (insert (format
+            "#+TITLE:       %s
 #+AUTHOR:      %s
 #+EMAIL:       %s
 #+DATE:        %s
@@ -252,31 +254,29 @@ month and day): " (unless (string= i "")
 #+OPTIONS:     H:%d num:%s toc:%s \\n:%s ::%s |:%s ^:%s -:%s f:%s *:%s <:%s
 #+DESCRIPTION: %s
 "
-           (if (string= title "") (buffer-name) title)
-           (user-full-name)
-           user-mail-address
-           (format-time-string (substring (car org-time-stamp-formats) 1 -1))
-           (if (string= uri "") "<TODO: insert your uri here>" uri)
-           (if (string= keywords "")
-               "<TODO: insert your keywords here>"
-             keywords)
-           (if (string= tags "") "<TODO: insert your tags here>" tags)
-           org-export-default-language
-           org-export-headline-levels
-           nil ;; org-export-with-section-numbers
-           nil ;; org-export-with-toc
-           org-export-preserve-breaks
-           ;; org-export-html-expand
-           org-export-with-fixed-width
-           org-export-with-tables
-           nil ;; org-export-with-sub-superscripts
-           nil ;; org-export-with-special-strings
-           org-export-with-footnotes
-           org-export-with-emphasize
-           org-export-with-timestamps
-           (if (string= description "")
-               "<TODO: insert your description here>"
-             description))))
+            (if (string= title "") (buffer-name) title)
+            (user-full-name)
+            user-mail-address
+            (format-time-string (substring (car org-time-stamp-formats) 1 -1))
+            (if (string= uri "") "<TODO: insert your uri here>" uri)
+            the-keywords
+            the-tags
+            org-export-default-language
+            org-export-headline-levels
+            nil ;; org-export-with-section-numbers
+            nil ;; org-export-with-toc
+            org-export-preserve-breaks
+            ;; org-export-html-expand
+            org-export-with-fixed-width
+            org-export-with-tables
+            nil ;; org-export-with-sub-superscripts
+            nil ;; org-export-with-special-strings
+            org-export-with-footnotes
+            org-export-with-emphasize
+            org-export-with-timestamps
+            (if (string= description "")
+                "<TODO: insert your description here>"
+              description)))))
 
 (defun op/new-post (&optional category filename)
   "Setup a new post.
